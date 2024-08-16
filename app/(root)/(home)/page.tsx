@@ -1,15 +1,42 @@
+// import MeetingTypeList from "@/components/ui/MeetingTypeList";
+// import React from "react";
+
+// const Home = () => {
+//   const now = new Date();
+//   const time = now.toLocaleTimeString("en-US", {
+//     hour: "2-digit",
+//     minute: "2-digit",
+//   });
+//   const date = new Intl.DateTimeFormat("en-US", { dateStyle: "full" }).format(
+//     now
+//   );
+'use client'
+import React, { useEffect, useState } from "react";
 import MeetingTypeList from "@/components/ui/MeetingTypeList";
-import React from "react";
 
 const Home = () => {
+  const [clientTimeZone, setClientTimeZone] = useState("");
+
+  useEffect(() => {
+    // Get the client’s time zone when the component mounts
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    setClientTimeZone(timeZone);
+  }, []);
+
   const now = new Date();
+  const timeZone = clientTimeZone || "UTC";
+
+  // Format time with AM/PM
   const time = now.toLocaleTimeString("en-US", {
     hour: "2-digit",
     minute: "2-digit",
+    hour12: true, // Use 12-hour format with AM/PM
+    timeZone: timeZone,
   });
-  const date = new Intl.DateTimeFormat("en-US", { dateStyle: "full" }).format(
-    now
-  );
+
+  // Format date to full style
+  const date = new Intl.DateTimeFormat("en-US", { dateStyle: "full", timeZone }).format(now);
+
   return (
     <section className="flex size-full flex-col gap-10 text-white">
       <div className="h-[300px] w-full rounded-[20px] bg-hero bg-cover">
